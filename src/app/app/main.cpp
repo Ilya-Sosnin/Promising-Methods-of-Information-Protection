@@ -1,14 +1,12 @@
 #include "generator/BigNumGenerator.h"
 #include <iostream>
+#include <memory>
 
 int main() {
-    mpz_t a;
-    mpz_init(a);
+    BigNumGenerator gen;
 
-    gmp_randstate_t state;
-    gmp_randinit_default(state);
+    gen.generateParams();
+    gen.saveParams();
 
-    mpz_urandomb(a, state, 256);
-    gmp_printf("Generated num: %Zd", a);
     return 0;
 } 
