@@ -52,8 +52,6 @@ void BigNumGenerator::generateQ(mpz_t q) {
         mpz_setbit(q, 0);
         mpz_setbit(q, qBits - 1);
     } while (!isPrime(q));
-
-    // gmp_printf("q = %Zd\n", q);
 }
 
 void BigNumGenerator::generateP(mpz_t q, mpz_t p) {
@@ -77,8 +75,6 @@ void BigNumGenerator::findMultiplicativeGenerator(mpz_srcptr q, mpz_srcptr p, mp
     do {
         mpz_urandomm(g, rs, p);
     } while (!isMultiplicativeGenerator(q, p, g));
-
-    // gmp_printf("g = %Zd\n", g);
 }
 
 void BigNumGenerator::findCyclicGenerator(mpz_srcptr q, mpz_srcptr p, mpz_t g) {
@@ -94,10 +90,6 @@ void BigNumGenerator::findCyclicGenerator(mpz_srcptr q, mpz_srcptr p, mpz_t g) {
         mpz_powm(g, r, t, p);
 
     } while (mpz_cmp_ui(g, 1) == 0);
-
-    // gmp_printf("r = %Zd\n", r);
-    // gmp_printf("t = %Zd\n", t);
-    // gmp_printf("g = %Zd\n", g);
 
     mpz_clears(t, r, 0);
 }
