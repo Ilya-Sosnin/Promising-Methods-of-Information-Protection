@@ -1,2 +1,3 @@
 add_subdirectory(app)
 add_subdirectory(generator)
+add_subdirectory(DiffieHellman)

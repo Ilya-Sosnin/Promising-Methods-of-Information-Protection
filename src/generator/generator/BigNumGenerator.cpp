@@ -4,64 +4,72 @@
 
 BigNumGenerator::BigNumGenerator() {
     std::random_device rd;
-    mpz_inits(q, p, g, 0);
     gmp_randinit_default(rs);
     gmp_randseed_ui(rs, rd());
 };
 
 BigNumGenerator::~BigNumGenerator() {
-    mpz_clears(q, p, g, 0);
     gmp_randclear(rs);
 };
 
-void BigNumGenerator::generateParams() {
-    generateP();
-    findMultiplicativeGenerator();
-    // findCyclicGenerator();
+void BigNumGenerator::generateMultiplicativeParams(GroupParameters& params) {
+    generateP(params.q, params.p);
+    findMultiplicativeGenerator(params.q, params.p, params.g);
 }
 
-void BigNumGenerator::saveParams() {
+void BigNumGenerator::generateCyclicParams(GroupParameters& params) {
+    generateP(params.q, params.p);
+    findCyclicGenerator(params.q, params.p, params.g);
+}
+
+void BigNumGenerator::generateKey(mpz_t key, mpz_srcptr p) {
+    do {
+        mpz_urandomm(key, rs, p);
+    } while (mpz_cmp_ui(key, 0) == 0);
+}
+
+void BigNumGenerator::saveParams(GroupParameters& params) {
     FILE *file = fopen("params.key", "w");
 
     if (file == nullptr)
         throw std::runtime_error("Cannot open params.key");
 
-    gmp_fprintf(file, "%#0Zx\n", p);
-    gmp_fprintf(file, "%#0Zx\n", q);
-    gmp_fprintf(file, "%#0Zx\n", g);
+    gmp_fprintf(file, "%#0Zx\n", params.p);
+    gmp_fprintf(file, "%#0Zx\n", params.q);
+    gmp_fprintf(file, "%#0Zx\n", params.g);
 
     fclose(file);
 }
 
-void BigNumGenerator::generateQ() {
+void BigNumGenerator::generateQ(mpz_t q) {
     do {
         mpz_urandomb(q, rs, 8);
         mpz_setbit(q, 0);
         mpz_setbit(q, 7);
     } while (!isPrime(q));
 
-    gmp_printf("q = %Zd\n", q);
+    // gmp_printf("q = %Zd\n", q);
 }
 
-void BigNumGenerator::generateP() {
+void BigNumGenerator::generateP(mpz_t q, mpz_t p) {
     do {
-        generateQ();
+        generateQ(q);
         mpz_mul_ui(p, q, 2);
         mpz_add_ui(p, p, 1);
     } while (!isPrime(p));
 
-    gmp_printf("p = %Zd\n", p);
+    // gmp_printf("p = %Zd\n", p);
 }
 
-void BigNumGenerator::findMultiplicativeGenerator() {
+void BigNumGenerator::findMultiplicativeGenerator(mpz_srcptr q, mpz_srcptr p, mpz_t g) {
     do {
         mpz_urandomm(g, rs, p);
-    } while (!isMultiplicativeGenerator(g));
+    } while (!isMultiplicativeGenerator(q, p, g));
 
-    gmp_printf("g = %Zd\n", g);
+    // gmp_printf("g = %Zd\n", g);
 }
 
-void BigNumGenerator::findCyclicGenerator() {
+void BigNumGenerator::findCyclicGenerator(mpz_srcptr q, mpz_srcptr p, mpz_t g) {
     mpz_t t;
     mpz_t r;
     mpz_inits(t, r, 0);
@@ -86,7 +94,7 @@ bool BigNumGenerator::isPrime(const mpz_t num) {
     return mpz_probab_prime_p(num, reps) > 0;
 }
 
-bool BigNumGenerator::isMultiplicativeGenerator(const mpz_t g) {
+bool BigNumGenerator::isMultiplicativeGenerator(mpz_srcptr q, mpz_srcptr p, mpz_srcptr g) {
     bool isGen;
     mpz_t pSub1;
     mpz_t resPowm;
