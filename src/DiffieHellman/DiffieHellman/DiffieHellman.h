@@ -3,17 +3,15 @@
 
 #include "generator/BigNumGenerator.h"
 
-#include <memory>
-
 class DiffieHellman
 {
 public:
     DiffieHellman();
     DiffieHellman(const GroupParameters& params);
-    ~DiffieHellman();
+    virtual ~DiffieHellman();
 
-    void generateParams();
-    void generateKeys();
+    virtual void generateParams();
+    virtual void generateKeys();
 
     void calculateSharedSecret();
 
@@ -28,7 +26,7 @@ public:
     const GroupParameters& getParams() const { return params; };
     mpz_srcptr getPublicKey() const { return  publicKey; };
 
-private:
+protected:
     mpz_t publicKey;
     mpz_t privateKey;
     mpz_t peerPublicKey;
