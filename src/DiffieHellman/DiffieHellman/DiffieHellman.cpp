@@ -16,7 +16,7 @@ DiffieHellman::~DiffieHellman() {
 }
 
 void DiffieHellman::generateParams() {
-    gen.generateCyclicParams(params);
+    gen.generateMultiplicativeParams(params);
 }
 
 void DiffieHellman::generateKeys() {
