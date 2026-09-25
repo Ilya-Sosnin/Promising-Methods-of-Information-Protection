@@ -2,7 +2,7 @@
 #include <fstream>
 #include <random>
 
-BigNumGenerator::BigNumGenerator() {
+BigNumGenerator::BigNumGenerator() : qBits{256}, pBits{1024} {
     std::random_device rd;
     gmp_randinit_default(rs);
     gmp_randseed_ui(rs, rd());
@@ -41,24 +41,36 @@ void BigNumGenerator::saveParams(GroupParameters& params) {
     fclose(file);
 }
 
+void BigNumGenerator::setParamSizes(unsigned int qSize, unsigned int pSize) {
+    qBits = qSize;
+    pBits = pSize;
+}
+
 void BigNumGenerator::generateQ(mpz_t q) {
     do {
-        mpz_urandomb(q, rs, 8);
+        mpz_urandomb(q, rs, qBits);
         mpz_setbit(q, 0);
-        mpz_setbit(q, 7);
+        mpz_setbit(q, qBits - 1);
     } while (!isPrime(q));
 
     // gmp_printf("q = %Zd\n", q);
 }
 
 void BigNumGenerator::generateP(mpz_t q, mpz_t p) {
+    mpz_t k;
+    mpz_init(k);
+
     do {
         generateQ(q);
-        mpz_mul_ui(p, q, 2);
+
+        mpz_urandomb(k, rs, pBits - qBits);
+        mpz_setbit(k, pBits - qBits - 1);
+
+        mpz_mul(p, k, q);
         mpz_add_ui(p, p, 1);
     } while (!isPrime(p));
 
-    // gmp_printf("p = %Zd\n", p);
+    mpz_clear(k);
 }
 
 void BigNumGenerator::findMultiplicativeGenerator(mpz_srcptr q, mpz_srcptr p, mpz_t g) {

@@ -30,8 +30,11 @@ public:
     void generateCyclicParams(GroupParameters& params);
     void generateKey(mpz_t key, mpz_srcptr p);
     void saveParams(GroupParameters& params);
+    void setParamSizes(unsigned int qSize, unsigned int pSize);
 
 private:
+    int qBits;
+    int pBits;
     static constexpr int reps{30};
     gmp_randstate_t rs;
 
