@@ -15,4 +15,5 @@ target_link_libraries(
   PRIVATE
   DiffieHellman
   DiffieHellmanSubgroup
+  MQV
 )
