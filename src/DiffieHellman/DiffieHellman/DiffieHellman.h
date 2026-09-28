@@ -12,8 +12,7 @@ public:
 
     virtual void generateParams();
     virtual void generateKeys();
-
-    void calculateSharedSecret();
+    virtual void calculateSharedSecret();
 
     void setParams(const GroupParameters& newParams);
     void setPeerPublicKey(mpz_srcptr key);

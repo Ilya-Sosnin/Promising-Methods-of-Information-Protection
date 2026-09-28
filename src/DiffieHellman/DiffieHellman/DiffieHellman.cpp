@@ -54,5 +54,5 @@ void DiffieHellman::printPeerPublicKey() {
 }
 
 void DiffieHellman::printSharedSecret() {
-    gmp_printf("Shared secreet: %Zd\n", sharedSecret);
+    gmp_printf("Shared secret: %Zd\n", sharedSecret);
 }
