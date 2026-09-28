@@ -13,5 +13,7 @@ set_target_properties(
 target_link_libraries(
   ${target_name}
   PRIVATE
-  BigNumGenerator
+  DiffieHellman
+  DiffieHellmanSubgroup
+  MQV
 )
