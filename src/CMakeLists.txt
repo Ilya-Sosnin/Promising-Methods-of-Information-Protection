@@ -1,5 +1,5 @@
 add_subdirectory(app)
-add_subdirectory(generator)
+add_subdirectory(BigNumGenerator)
 add_subdirectory(DiffieHellman)
 add_subdirectory(DiffieHellmanSubgroup)
 add_subdirectory(MQV)

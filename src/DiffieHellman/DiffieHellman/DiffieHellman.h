@@ -1,7 +1,7 @@
 #ifndef DIFFIEHELLMAN_H
 #define DIFFIEHELLMAN_H
 
-#include "generator/BigNumGenerator.h"
+#include "BigNumGenerator/BigNumGenerator.h"
 
 class DiffieHellman
 {

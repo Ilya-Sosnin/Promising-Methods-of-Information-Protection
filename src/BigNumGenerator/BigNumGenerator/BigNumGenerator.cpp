@@ -1,4 +1,4 @@
-#include "generator/BigNumGenerator.h"
+#include "BigNumGenerator/BigNumGenerator.h"
 #include <fstream>
 #include <random>
 

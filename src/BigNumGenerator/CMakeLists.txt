@@ -1,8 +1,8 @@
 set(target_name BigNumGenerator)
 
 add_library(${target_name}
-  generator/BigNumGenerator.cpp
-  generator/BigNumGenerator.h
+  BigNumGenerator/BigNumGenerator.cpp
+  BigNumGenerator/BigNumGenerator.h
 )
 
 target_include_directories(
